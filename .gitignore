@@ -1,0 +1,37 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Go template
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
+.glide/
+
+.gitignore
+.idea/
+pkg/
+Would skip repository src/github.com/astaxie/beego
+Would skip repository src/github.com/elazarl/goproxy
+Would skip repository src/github.com/go-sql-driver/mysql
+Would skip repository src/github.com/go-vgo/robotgo
+Would skip repository src/github.com/golang-commonmark/markdown
+Would skip repository src/github.com/Luxurioust/excelize
+Would skip repository src/github.com/microcosm-cc/bluemonday
+Would skip repository src/github.com/opennota/urlesc
+Would skip repository src/github.com/palantir/stacktrace
+Would skip repository src/github.com/russross/blackfriday
+Would skip repository src/github.com/sundy-li/wechat_spider
+Would skip repository src/github.com/tealeg/xlsx
+Would skip repository src/golang.org/x/net
+src/.DS_Store
+src/lattecake.com/blog/main
+src/lattecake.com/ip/file_output_server
+src/lattecake.com/www/www
