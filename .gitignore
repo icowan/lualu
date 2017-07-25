@@ -15,7 +15,6 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 
-.gitignore
 .idea/
 pkg/
 Would skip repository src/github.com/astaxie/beego
@@ -35,3 +34,8 @@ src/.DS_Store
 src/lattecake.com/blog/main
 src/lattecake.com/ip/file_output_server
 src/lattecake.com/www/www
+Would skip repository src/github.com/gin-contrib/sse
+Would skip repository src/github.com/gin-gonic/gin
+Would skip repository src/github.com/golang/protobuf
+Would skip repository src/github.com/ugorji/go
+src/lattecake.com/www/static/img/
