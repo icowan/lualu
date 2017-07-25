@@ -17,8 +17,8 @@ import (
 )
 
 const (
-	wxAppId     = "wx9158c9591eb5a622"
-	wxAppSecret = "5988307a279df90d9210cafbb54b823b"
+	wxAppId     = "wx9158c9591eb5a"
+	wxAppSecret = "5988307a279df90d9210ca54b823b"
 
 	wxOriId         = "oriid"
 	wxToken         = "nianhui"
