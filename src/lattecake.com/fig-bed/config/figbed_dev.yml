@@ -1,0 +1,20 @@
+env: dev
+
+upload_image_token: hello
+upload_image_dir: ./images/
+upload_image_url: http://source.lattecake.com/
+
+post_article:
+    security:
+        username: sdf05cx0hqw51d28bn
+        password: 50c765cec7fa002110ecfbd94a192edb65c1a641
+
+mysql:
+    host: 127.0.0.1
+    port: 33306
+    user: root
+    password: admin
+    charset: utf8
+    database: lattecake-wechat
+
+log_file_name: ./logs/wechat.log

@@ -1,0 +1,16 @@
+env: test
+wechat:
+  app_id: wx9158c9591eb5a622
+  app_secret: 5988307a279df90d9210cafbb54b823b
+  token: nianhui
+  encode_AES_key: g2qTNCE4qMV8AJqZeXXE1LTml2H7ur7fWBJNeak24dF
+
+mysql:
+  host: 127.0.0.1
+  port: 33306
+  user: root
+  password: admin
+  charset: utf8
+  database: lattecake-wechat
+
+log_file_name: ./logs/wechat.log

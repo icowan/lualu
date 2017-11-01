@@ -14,40 +14,36 @@ import (
 	"reflect"
 	"strconv"
 	"time"
+	"lattecake.com/wechat/core"
 )
 
-const (
-	wxAppId     = "wx9158c9591eb5a"
-	wxAppSecret = "5988307a279df90d9210ca54b823b"
+var config *core.Config
 
-	wxOriId         = "oriid"
-	wxToken         = "nianhui"
-	wxEncodedAESKey = "g2qTNCE4qMV8AJqZeXXE1LTml2H7ur7fWBJNeak24dF"
+func init() {
+	config = core.Instance()
 
-	DB_HOST     = "127.0.0.1"
-	DB_PORT     = 33306
-	DB_USER     = "root"
-	DB_PASSWORD = "admin"
-	DB_CHARTSET = "utf8"
-	DB_DATABASE = "lattecake-wechat"
-)
+	switch config.Env {
+	case "prod":
+		gin.SetMode(gin.ReleaseMode)
+	case "dev":
+		gin.SetMode(gin.DebugMode)
+	case "test":
+		gin.SetMode(gin.TestMode)
+	}
+}
 
 func main() {
-
-	//gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
 
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	logFilename := "./logs/wechat.log"
-
-	logs.SetLogger(logs.AdapterFile, `{"filename":"`+logFilename+`","daily":true}`)
+	logs.SetLogger(logs.AdapterFile, `{"filename":"`+config.LogFileName+`","daily":true}`)
 	logs.EnableFuncCallDepth(true)
 	logs.Async()
 
-	//router.POST("/server/", WechatHandler)
+	router.POST("/server/", WechatHandler)
 	router.Any("/", WechatHandler)
 
 	router.Run(":8088")
@@ -75,10 +71,10 @@ type WechatUser struct {
 
 func WechatHandler(c *gin.Context) {
 	config := &wechat.Config{
-		AppID:          wxAppId,
-		AppSecret:      wxAppSecret,
-		Token:          wxToken,
-		EncodingAESKey: wxEncodedAESKey,
+		AppID:          config.Wechat.AppId,
+		AppSecret:      config.Wechat.AppSecret,
+		Token:          config.Wechat.Token,
+		EncodingAESKey: config.Wechat.EncodeAESKey,
 	}
 	wx := wechat.NewWechat(config)
 
@@ -165,7 +161,6 @@ func WechatHandler(c *gin.Context) {
 	err := server.Serve()
 
 	if err != nil {
-		logs.Error("------")
 		logs.Error(err)
 		return
 	}
@@ -192,11 +187,16 @@ func NewArticles(list []interface{}, newsType string) []*message.Article {
 }
 
 func SaveUser(msg message.MixMessage, reply string, sign string, nonce string) error {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE, DB_CHARTSET))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", config.Mysql.User, config.Mysql.Password, config.Mysql.Host, config.Mysql.Port, config.Mysql.Database, config.Mysql.Charset))
 	if err != nil {
 		logs.Critical(err)
 	}
-	defer db.Close()
+	//defer db.Close()
+
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(0)
+	db.Ping()
+
 	dateTime := time.Now().Format("2006-01-02 15:04:05")
 
 	userCh := make(chan bool, 1)
@@ -267,13 +267,12 @@ func SaveUser(msg message.MixMessage, reply string, sign string, nonce string) e
 				return
 			}
 			defer stmt.Close()
-			res, err := stmt.Exec(msg.ToUserName, dateTime, dateTime)
+			_, err = stmt.Exec(msg.ToUserName, dateTime, dateTime)
 			if err != nil {
 				logs.Error(err, "wechat_users")
 				userCh <- false
 				return
 			}
-			logs.Info(res)
 		}
 		userCh <- true
 	}()
