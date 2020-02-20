@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	fileName := "/Users/LatteCake/Downloads/general.yirendai.com_access.log"
+	fileName := "/var/log/lattecake.com_access.log"
 	fl, err := os.Open(fileName)
 	if err != nil {
 		log.Println(fileName, err)
